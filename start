@@ -1,0 +1,16 @@
+#!/bin/bash
+
+[ $# -lt 1 ] && echo './start [subject]' && exit 1
+[ ! -d "raw" ] && mkdir "raw"
+
+NAME=$(echo "$1_$(date +%Y_%m_%d)")
+
+[ -f "raw/$NAME.md" -o grep "$NAME" notelist >/dev/null ] && echo "You've already done your work for the day, to edit use ./edit" && exit 1
+
+echo "$NAME" >> notelist
+
+echo "---
+title: $(date +%d.%m.%y | sed 's/0\([1-9]\)/\1/g')
+---" > "raw/$NAME.md"
+
+vim "raw/$NAME.md"

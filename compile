@@ -1,0 +1,7 @@
+#!/bin/sh
+
+mkdir -p out
+
+for i in $(cat notelist) ; do
+        pandoc "raw/$i.md" -t latex -o "out/$i.pdf"
+done
