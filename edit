@@ -1,2 +1,5 @@
 #!/bin/sh
-echo "this script still needs to be done"
+[ "$#" -lt "1" ] && echo "Usage: ./edit [subject]" && exit 1
+NAME=$(echo "$1_$(date +%Y_%m_%d)")
+[ ! -f "raw/$NAME.md" ] && echo "$NAME doesn't exist" && exit 1
+vim "raw/$NAME.md"
