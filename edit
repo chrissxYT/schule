@@ -1,5 +1,15 @@
 #!/bin/sh
-[ "$#" -lt "1" ] && echo "Usage: ./edit [subject]" && exit 1
-NAME=$(echo "$1_$(date +%Y_%m_%d)")
-[ ! -f "raw/$NAME.md" ] && echo "$NAME doesn't exist" && exit 1
-vim "raw/$NAME.md"
+if [ "$#" -lt "1" ] ; then
+        filecount=$(ls raw | wc -l)
+        [ $filecount -eq 0 ] && echo "There's nothing to edit." && exit 1
+        n=1
+        [ $filecount -eq 1 ] || {
+                ls -rc raw | awk -F '/' '{print $NF}' | nl
+                read -erp "Pick a file by number to edit. " n
+        }
+        vim "raw/$(basename "$(ls -rc raw | nl | grep -w "$n" | awk '{print $2}')")"
+else
+        NAME=$(echo "$1_$(date +%Y_%m_%d)")
+        [ ! -f "raw/$NAME.md" ] && echo "$NAME doesn't exist" && exit 1
+        vim "raw/$NAME.md"
+fi
